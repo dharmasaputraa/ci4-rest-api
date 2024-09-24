@@ -2,6 +2,9 @@
 
 namespace Config;
 
+use App\Filters\ApiKeyFilter;
+use App\Filters\AuthFilter;
+use App\Filters\CorsFilter;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
 use CodeIgniter\Filters\CSRF;
@@ -34,6 +37,9 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'api-auth'      => AuthFilter::class,
+        'cors'          => CorsFilter::class,
+        'api-key'       => ApiKeyFilter::class
     ];
 
     /**
@@ -72,6 +78,7 @@ class Filters extends BaseFilters
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
+            'cors',
         ],
         'after' => [
             // 'honeypot',
@@ -103,5 +110,7 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        'api-key' => ['before' => ['api/*']],
+    ];
 }
