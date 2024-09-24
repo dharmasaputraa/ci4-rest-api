@@ -16,10 +16,10 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
     $routes->post('login', 'Auth\AuthController::login');
     $routes->get('logout', 'Auth\AuthController::logout', ['filter' => ['tokens', 'api-auth']]);
   });
+  $routes->get('profile', 'UserController::profile', ['filter' => ['jwt']]);
 
   // Routes yang memerlukan tokens
   $routes->group('', ['filter' => 'tokens', 'api-auth'], function ($routes) {
-    $routes->get('profile', 'UserController::profile');
 
     $routes->group('projects', function ($routes) {
       $routes->get('', 'ProjectController::list');
@@ -27,4 +27,12 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
       $routes->delete('(:num)', 'ProjectController::destroy/$1');
     });
   });
+});
+
+$routes->group('api/', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+  // Auth Routes
+  $routes->group('jwt-auth', function ($routes) {
+    $routes->post('login', 'Auth\AuthJwtController::login');
+  });
+  $routes->get('jwt-profile', 'UserController::profile', ['filter' => ['jwt']]);
 });
